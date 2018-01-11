@@ -1,25 +1,22 @@
 const Koa = require('koa');
-const koaRouter = require('koa-router');
 const bodyParser = require('koa-body');
 const koaConvert = require('koa-convert');
+const koaRouter = require('koa-router');
 const helmet = require('koa-helmet');
 const { logger } = require('./services/logger');
 const { generateRequestId } = require('./middleware/request-id-generator');
 const { errorResponder } = require('./middleware/error-responder');
 const { k } = require('./project-env');
-const { rootRouter } = require('./routes/root.routes');
+const { authRouter } = require('./routes/auth/auth.routes');
 const {
   healthCheckRouter,
 } = require('./routes/health-check/health-check.routes');
-const { demoRouter } = require('./routes/demo/demo.routes');
 
 const app = new Koa();
+const router = koaRouter();
 
-// Entry point for all modules.
-const api = koaRouter()
-  .use('/', rootRouter.routes())
-  .use('/health', healthCheckRouter.routes())
-  .use('/demo', demoRouter.routes());
+authRouter(router);
+healthCheckRouter(router);
 
 /* istanbul ignore if */
 if (k.REQUEST_LOGS) {
@@ -37,8 +34,8 @@ app
   .use(koaConvert(bodyParser()))
   .use(generateRequestId)
   .use(errorResponder)
-  .use(api.routes())
-  .use(api.allowedMethods());
+  .use(router.routes())
+  .use(router.allowedMethods());
 
 function startFunction() {
   const PORT = process.env.PORT || 3000;
