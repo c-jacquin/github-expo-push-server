@@ -1,0 +1,19 @@
+displayName: |
+  Authentication endpoints
+description: |
+  Github authentication endpoint.
+/auth:
+  post:
+    description: |
+      Exchange a github code against an oauth token.
+    body:
+      code: "string"
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "token": "string"
+              }
+    securedBy: [none]
