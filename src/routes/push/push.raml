@@ -1,0 +1,35 @@
+displayName: |
+  Push notifications endpoints
+description: |
+/push:
+  post:
+    description: |
+      Receive notification from github and send push notification via expo
+    body:
+      sender: "object"
+      action: "string"
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {}
+    securedBy: [none]
+/push/register:
+  post:
+    description: |
+      register a user (used to send push notification later)
+    body:
+      login: "string"
+      token: "string"
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "push notification registered"
+              }
+    securedBy: [none]
+
+

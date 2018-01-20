@@ -8,14 +8,17 @@ const { generateRequestId } = require('./middleware/request-id-generator');
 const { errorResponder } = require('./middleware/error-responder');
 const { k } = require('./project-env');
 const { authRouter } = require('./routes/auth/auth.routes');
+const { pushRouter } = require('./routes/push/push.routes');
 const {
   healthCheckRouter,
 } = require('./routes/health-check/health-check.routes');
+const { connectMongo } = require('./db');
 
 const app = new Koa();
 const router = koaRouter();
 
 authRouter(router);
+pushRouter(router);
 healthCheckRouter(router);
 
 /* istanbul ignore if */
@@ -37,8 +40,10 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-function startFunction() {
+async function startFunction() {
   const PORT = process.env.PORT || 3000;
+
+  await connectMongo();
   logger.info(`Starting server on port ${PORT}`);
   app.listen(PORT);
 }
