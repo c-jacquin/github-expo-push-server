@@ -1,3 +1,8 @@
 const isString = term => typeof term === 'string';
 
-module.exports = { isString };
+const validateGithubSender = sender => !!sender.login;
+
+module.exports = {
+  isString,
+  validateGithubSender,
+};
