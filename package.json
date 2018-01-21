@@ -26,7 +26,7 @@
     "precommit": "lint-staged",
     "cz": "git-cz",
     "lint": "eslint .",
-    "raml": "raml2html -i doc/api/api.raml -o api.html",
+    "docs": "raml2html -i api.raml -o docs/index.html",
     "daemon:start": "forever --uid api-koa-starter -a -c 'node --use-strict' start ./src/app.js",
     "daemon:stop": "forever stop api-koa-starter || true"
   },

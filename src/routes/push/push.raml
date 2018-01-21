@@ -1,7 +1,7 @@
 displayName: |
   Push notifications endpoints
 description: |
-/push:
+/:
   post:
     description: |
       Receive notification from github and send push notification via expo
@@ -15,7 +15,7 @@ description: |
             example: |
               {}
     securedBy: [none]
-/push/register:
+/register:
   post:
     description: |
       register a user (used to send push notification later)
