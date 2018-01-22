@@ -1,4 +1,5 @@
 const Koa = require('koa');
+const throng = require('throng');
 const bodyParser = require('koa-body');
 const koaConvert = require('koa-convert');
 const koaRouter = require('koa-router');
@@ -44,6 +45,7 @@ async function startFunction() {
   const PORT = process.env.PORT || 3000;
 
   await connectMongo();
+
   logger.info(`Starting server on port ${PORT}`);
   app.listen(PORT);
 }
@@ -51,7 +53,6 @@ async function startFunction() {
 /* istanbul ignore if */
 if (require.main === module) {
   if (process.env.PROJECT_ENV === 'staging') {
-    const throng = require('throng');
     throng(startFunction);
   } else {
     startFunction();
