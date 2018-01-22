@@ -13,7 +13,7 @@ const getToken = async (code, clientId) => {
     method: 'POST',
     body: {
       client_id: clientId,
-      client_secret: k.githubSecret,
+      client_secret: k.GITHUB_SECRET,
       code,
       accept: 'json',
     },
