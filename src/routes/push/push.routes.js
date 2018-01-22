@@ -1,7 +1,15 @@
 const Expo = require('expo-server-sdk');
-const { pushCtrl, registerCtrl } = require('./push.controller');
+const {
+  pushCtrl,
+  registerCtrl,
+  updateProfileCtrl,
+} = require('./push.controller');
 const { validateParams } = require('../../middleware/validate-params');
-const { isString, validateGithubSender } = require('../../helpers/validators');
+const {
+  isString,
+  validateGithubSender,
+  validatePushProfile,
+} = require('../../helpers/validators');
 
 /**
  * Receive push notification from github and send it to expo server
@@ -19,6 +27,13 @@ const pushRouter = router => {
     validateParams(['request', 'body'], ['login'], isString),
     validateParams(['request', 'body'], ['pushToken'], Expo.isExpoPushToken),
     registerCtrl
+  );
+
+  router.put(
+    '/push/profile',
+    validateParams(['request', 'body'], ['login'], isString),
+    validateParams(['request', 'body'], ['profile'], validatePushProfile),
+    updateProfileCtrl
   );
 };
 

@@ -3,6 +3,10 @@ class User {
     return Promise.resolve([]);
   }
 
+  static update() {
+    return Promise.resolve();
+  }
+
   save() {
     return Promise.resolve();
   }

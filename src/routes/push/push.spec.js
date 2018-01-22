@@ -22,7 +22,7 @@ describe('Push Notification', () => {
   });
 
   describe('POST /push/register', () => {
-    it('should respond with an empty object', () => {
+    it('should respond with a success message', () => {
       return request
         .post('/push/register')
         .send({
@@ -30,6 +30,23 @@ describe('Push Notification', () => {
           pushToken: 'ExponentPushToken[InsQgdYEVGYODIlggg9uFD]',
         })
         .expect(200, { message: 'push notification registered' });
+    });
+  });
+
+  describe('PUT /push/profile', () => {
+    it('should respond with a success message', () => {
+      return request
+        .put('/push/profile')
+        .send({
+          login: 'test',
+          profile: {
+            pushEnabled: true,
+            pushIssue: true,
+            pushCommit: false,
+            pushPr: false,
+          },
+        })
+        .expect(200, { message: 'profile updated.' });
     });
   });
 });
