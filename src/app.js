@@ -1,5 +1,4 @@
 const Koa = require('koa');
-const throng = require('throng');
 const bodyParser = require('koa-body');
 const koaConvert = require('koa-convert');
 const koaRouter = require('koa-router');
@@ -52,11 +51,7 @@ async function startFunction() {
 
 /* istanbul ignore if */
 if (require.main === module) {
-  if (process.env.PROJECT_ENV === 'staging') {
-    throng(startFunction);
-  } else {
-    startFunction();
-  }
+  startFunction();
 }
 
 module.exports = { app };
