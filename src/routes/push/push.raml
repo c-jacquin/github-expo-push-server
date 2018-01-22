@@ -31,5 +31,28 @@ description: |
                 "message": "push notification registered"
               }
     securedBy: [none]
+/profile:
+  put:
+    description: |
+      update the user profile
+    body:
+      login: "string"
+      profile: |
+        {
+          pushEnabled: "boolean",
+          pushIssue: "boolean",
+          pushCommit: "boolean",
+          pushPr: "boolean"
+        }
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "profile updated."
+              }
+    securedBy: [none]
+
 
 

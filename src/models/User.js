@@ -10,6 +10,22 @@ const userSchema = new Schema({
     type: String,
     unique: true,
   },
+  pushEnabled: {
+    type: Boolean,
+    default: true,
+  },
+  pushCommit: {
+    type: Boolean,
+    default: true,
+  },
+  pushIssue: {
+    type: Boolean,
+    default: true,
+  },
+  pushPr: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const User = mongoose.model('User', userSchema);
