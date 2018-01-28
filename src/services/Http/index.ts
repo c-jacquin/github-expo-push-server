@@ -23,11 +23,15 @@ export class Http {
     )
   }
 
-  post(uri: string, body: any) {
-    return this.fetch.post(uri, body)
+  get(uri: string, config?: axios.AxiosRequestConfig) {
+    return this.fetch.get(uri, config)
   }
 
-  put(uri: string, body: any) {
-    return this.fetch.put(uri, body)
+  post(uri: string, body: any, config?: axios.AxiosRequestConfig) {
+    return this.fetch.post(uri, body, config)
+  }
+
+  put(uri: string, body: any, config?: axios.AxiosRequestConfig) {
+    return this.fetch.put(uri, body, config)
   }
 }

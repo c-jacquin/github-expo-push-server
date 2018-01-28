@@ -8,17 +8,17 @@ import { PushNotification } from './PushNotification'
 
 const container = createContainer()
 
-const singleton = Service => {
-  return asClass(Service, { lifetime: Lifetime.SINGLETON })
+const singleton = <T>(Service) => {
+  return asClass<T>(Service, { lifetime: Lifetime.SINGLETON })
 }
 
 container.register({
-  env: singleton(Env),
-  expo: singleton(require('expo-server-sdk')),
-  github: singleton(Github),
-  http: singleton(Http),
-  logger: singleton(Logger),
-  pushNotification: singleton(PushNotification),
+  env: singleton<Env>(Env),
+  expo: singleton<any>(require('expo-server-sdk')),
+  github: singleton<Github>(Github),
+  http: singleton<Http>(Http),
+  logger: singleton<Logger>(Logger),
+  pushNotification: singleton<PushNotification>(PushNotification),
 })
 
 export { container, Env, Github, Logger, PushNotification }
