@@ -32,7 +32,6 @@ async function startFunction() {
 
     container.register<MongoEntityManager>('dbClient', asValue(mongoManager))
   } catch (err) {
-    console.error(err)
     logger.error('database connection error: ', err)
     process.exit(1)
   }
