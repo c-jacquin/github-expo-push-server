@@ -2,6 +2,7 @@ export class Env {
   PORT: number
   REQUEST_LOGS: boolean
   LOG_LEVEL: string
+  GITHUB_API: string
   GITHUB_TOKEN_URI: string
   GITHUB_SECRET: string
   TYPEORM_CONNECTION: 'mongodb'

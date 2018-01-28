@@ -2,7 +2,7 @@ import { before, route, POST, PUT } from 'awilix-koa'
 import { MongoEntityManager } from 'typeorm'
 import * as Expo from 'expo-server-sdk'
 import * as check from 'check-types'
-import { validateParams } from '../../middleware'
+import { validateParams, exposeUser } from '../../middleware'
 import { PushNotification } from '../../services'
 
 @route('/push')
@@ -48,12 +48,17 @@ export default class PushApi {
   @route('/register')
   @POST()
   @before([
-    validateParams(['request', 'body'], ['login'], check.string),
+    validateParams(['request', 'headers'], ['authorization'], check.string),
     validateParams(['request', 'body'], ['pushToken'], Expo.isExpoPushToken),
+    exposeUser,
   ])
   async register(ctx) {
     try {
-      const user = await this.dbClient.save('User', ctx.request.body)
+      const { login } = ctx.state.container.user
+      await this.dbClient.save('User', {
+        ...ctx.request.body,
+        login,
+      })
 
       ctx.body = {
         message: 'push notification registered',
@@ -73,16 +78,17 @@ export default class PushApi {
   @route('/profile')
   @PUT()
   @before([
-    validateParams(['request', 'body'], ['login'], check.string),
+    validateParams(['request', 'headers'], ['authorization'], check.string),
     validateParams(
       ['request', 'body'],
       ['profile'],
       PushApi.validatePushProfile,
     ),
+    exposeUser,
   ])
   async pushProfile(ctx) {
     try {
-      const { login } = ctx.request.body
+      const { login } = ctx.state.container.user
 
       await this.dbClient.findOneAndUpdate('User', { login }, ctx.request.body)
 

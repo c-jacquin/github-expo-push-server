@@ -1,5 +1,6 @@
 import { Env } from '../Env'
 import { Http } from '../Http'
+import { GithubUser } from './GithubUser'
 
 export class Github {
   env: Env
@@ -19,5 +20,16 @@ export class Github {
     })
 
     return result.data.access_token
+  }
+
+  async getUser(token: string): Promise<GithubUser> {
+    const result = await this.http.get(this.env.GITHUB_API + '/user', {
+      headers: {
+        Accept: 'application/vnd.github.v3+json',
+        Authorization: `token ${token}`,
+      },
+    })
+
+    return result.data
   }
 }
