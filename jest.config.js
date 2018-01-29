@@ -21,7 +21,7 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageReporters: [ 'text', 'lcov' ],
   setupFiles: [
-    './scripts/tests/test-setup.ts'
+    './scripts/tests/test-setup.js'
   ],
   testPathIgnorePatterns: [
     '<rootDir>/dist/',
