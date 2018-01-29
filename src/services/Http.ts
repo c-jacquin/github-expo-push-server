@@ -15,7 +15,16 @@ export class Http {
         )
         return response
       },
-      error => Promise.reject(error),
+      error => {
+        logger.info(
+          `[${meta.requestId}] - - [${clfDate()}] ` +
+            `Http => ${error.config.method.toUpperCase()} ` +
+            `${error.config.url} HTTP/1.1 ${error.response.status}` +
+            `- ${error.message}` +
+            `${error.config.headers['User-Agent']}`,
+        )
+        return Promise.reject(error)
+      },
     )
   }
 

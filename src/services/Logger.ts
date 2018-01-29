@@ -7,30 +7,23 @@ const formatter = options =>
     ? `[RQID=${options.meta.requestId}] ${options.message}`
     : `${options.message}`
 
-const { Console, File } = transports
-
 export class Logger extends WinstonLogger {
   static COMBINED_FILE = 'log/combined.log'
 
   constructor(env: Env) {
     super({
       transports: [
-        new Console({
+        new transports.Console({
           colorize: true,
+          level: env.LOG_LEVEL,
+          formatter,
+        }),
+        new transports.File({
+          filename: Logger.COMBINED_FILE,
           level: env.LOG_LEVEL,
           formatter,
         }),
       ],
     })
-    /* istanbul ignore if */
-    if (env.NODE_ENV === 'production') {
-      this.add(
-        new File({
-          filename: Logger.COMBINED_FILE,
-          level: env.LOG_LEVEL,
-          formatter,
-        }),
-      )
-    }
   }
 }

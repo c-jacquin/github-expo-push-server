@@ -1,4 +1,6 @@
 import 'reflect-metadata'
+import * as fs from 'fs'
+import * as path from 'path'
 import * as Koa from 'koa'
 import * as bodyParser from 'koa-bodyparser'
 import * as helmet from 'koa-helmet'
@@ -17,9 +19,8 @@ import { errorResponder } from './middleware/error-responder'
 import { generateRequestId } from './middleware/request-id-generator'
 
 /* tslint:disable */
-(async () => {
-
-/* tslint:enable */
+;(async () => {
+  /* tslint:enable */
   const logger = container.resolve<Logger>('logger')
   const env = container.resolve<Env>('env')
 
@@ -29,8 +30,21 @@ import { generateRequestId } from './middleware/request-id-generator'
       '[RQID=:request-id] - :remote-user' +
       ' [:date[clf]] ":method :url HTTP/:http-version" ' +
       ':status :res[content-length] ":referrer" ":user-agent"'
+
     morgan.token('request-id', (req: any) => req.requestId)
-    app.use(morgan(format))
+
+    if (env.NODE_ENV !== 'production') {
+      const stream = fs.createWriteStream(
+        path.join(process.cwd(), '/log/combined.log'),
+        {
+          flags: 'a',
+        },
+      )
+
+      app.use(morgan(format, { stream }))
+    } else {
+      app.use(morgan(format))
+    }
   }
 
   try {
