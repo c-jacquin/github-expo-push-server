@@ -1,15 +1,9 @@
-import { Env } from '../Env'
-import { Http } from '../Http'
-import { GithubUser } from './GithubUser'
+import { Env } from './Env'
+import { Http } from './Http'
+import { GithubUser } from './helpers/GithubUser'
 
 export class Github {
-  env: Env
-  http: Http
-
-  constructor({ env, http }) {
-    this.env = env
-    this.http = http
-  }
+  constructor(private env: Env, private http: Http) {}
 
   async getToken(code: string, clientId: string): Promise<string> {
     const result = await this.http.post(this.env.GITHUB_TOKEN_URI, {

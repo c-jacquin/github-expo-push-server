@@ -1,5 +1,5 @@
 import { createConnection } from 'typeorm'
-import { Env } from './services'
+import { Env } from './services/Env'
 
 export const connectDatabase = (env: Env) => {
   return createConnection({

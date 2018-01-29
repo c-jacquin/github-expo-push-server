@@ -1,35 +1,33 @@
 import 'jest'
 import * as supertest from 'supertest'
-import * as nock from 'nock'
 import { app } from '../../../app'
+import { Github } from '../../../services/Github'
+
+jest.mock('../../../services/Github')
 
 const request = supertest.agent(app.listen())
 
 describe('Authentication', () => {
   describe('POST /auth', () => {
-    it('should call the github oAuth endpoint', async () => {
-      nock('https://github.com/login/oauth')
-        .post('/access_token')
-        .reply(200, {
-          access_token: '123ABC',
-        })
+    it('should call the github getToken method', async () => {
+      const spy = jest.spyOn(Github.prototype, 'getToken')
 
-      const response = await request
+      await request
         .post('/auth')
-        .send({ code: 'testcode' })
+        .send({ code: 'testCode', clientId: 'testClientId' })
         .expect(200, {
-          token: '123ABC',
+          token: 'test',
         })
 
-      console.log(response)
+      expect(spy).toHaveBeenCalledWith('testCode', 'testClientId')
     })
 
-    it('should respond an error if no code is provided in the body', () => {
-      return request.post('/auth').expect(400)
+    it('should respond an error if no code is provided in the body', async () => {
+      await request.post('/auth').expect(400)
     })
 
-    it('should respond an error if code is not a string', () => {
-      return request
+    it('should respond an error if code is not a string', async () => {
+      await request
         .post('/auth')
         .send({ code: true })
         .expect(400)

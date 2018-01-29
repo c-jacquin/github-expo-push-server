@@ -2,8 +2,9 @@ import { before, route, POST, PUT } from 'awilix-koa'
 import { MongoEntityManager } from 'typeorm'
 import * as Expo from 'expo-server-sdk'
 import * as check from 'check-types'
-import { validateParams, exposeUser } from '../../middleware'
-import { PushNotification } from '../../services'
+import { validateParams } from '../_helpers_/validate-params'
+import { exposeUser } from '../_helpers_/expose-user'
+import { PushNotification } from '../../services/PushNotification'
 
 @route('/push')
 export default class PushApi {
@@ -18,13 +19,10 @@ export default class PushApi {
 
   static validateGithubSender = sender => !!sender.login
 
-  pushNotification: PushNotification
-  dbClient: MongoEntityManager
-
-  constructor({ pushNotification, dbClient }) {
-    this.pushNotification = pushNotification
-    this.dbClient = dbClient
-  }
+  constructor(
+    private pushNotification: PushNotification,
+    private dbClient: MongoEntityManager,
+  ) {}
 
   @POST()
   @before([
@@ -36,13 +34,9 @@ export default class PushApi {
     ),
   ])
   async push(ctx) {
-    try {
-      await this.pushNotification.dispatchNotifications(ctx.request.body)
+    await this.pushNotification.dispatchNotifications(ctx.request.body)
 
-      ctx.body = {}
-    } catch (err) {
-      ctx.throw(err)
-    }
+    ctx.body = {}
   }
 
   @route('/register')
@@ -54,7 +48,8 @@ export default class PushApi {
   ])
   async register(ctx) {
     try {
-      const { login } = ctx.state.container.user
+      const { login } = ctx.state.container.resolve('user')
+
       await this.dbClient.save('User', {
         ...ctx.request.body,
         login,
@@ -65,11 +60,13 @@ export default class PushApi {
       }
     } catch (err) {
       // if duplicate error send a 200 status
+      /* istanbul ignore next */
       if (err.code === 11000) {
         ctx.body = {
           message: 'push notification already registered.',
         }
       } else {
+        /* istanbul ignore next */
         ctx.throw(err)
       }
     }
@@ -87,16 +84,12 @@ export default class PushApi {
     exposeUser,
   ])
   async pushProfile(ctx) {
-    try {
-      const { login } = ctx.state.container.user
+    const { login } = ctx.state.container.resolve('user')
 
-      await this.dbClient.findOneAndUpdate('User', { login }, ctx.request.body)
+    await this.dbClient.findOneAndUpdate('User', { login }, ctx.request.body)
 
-      ctx.body = {
-        message: 'profile updated.',
-      }
-    } catch (err) {
-      ctx.throw(err)
+    ctx.body = {
+      message: 'profile updated.',
     }
   }
 }

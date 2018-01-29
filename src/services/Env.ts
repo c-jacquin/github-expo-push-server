@@ -5,6 +5,7 @@ export class Env {
   GITHUB_API: string
   GITHUB_TOKEN_URI: string
   GITHUB_SECRET: string
+  NODE_ENV: string
   TYPEORM_CONNECTION: 'mongodb'
   TYPEORM_URL: string
   TYPEORM_SYNCHRONIZE: boolean
