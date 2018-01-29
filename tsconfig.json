@@ -11,6 +11,9 @@
           "typings"
         ],
         "outDir": "dist",
-        "rootDir": "."
-    }
+        "rootDir": "src"
+    },
+    "exclude": [
+      "**/__mocks__/*"
+    ]
 }
