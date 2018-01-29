@@ -1,29 +1,21 @@
 import { before, route, POST } from 'awilix-koa'
 import * as check from 'check-types'
 
-import { validateParams } from '../../middleware'
-import { Github } from '../../services'
+import { validateParams } from '../_helpers_/validate-params'
+import { Github } from '../../services/Github'
 
 @route('/auth')
 export default class AuthApi {
-  github: Github
-
-  constructor({ github }) {
-    this.github = github
-  }
+  constructor(private github: Github) {}
 
   @POST()
   @before([validateParams(['request', 'body'], ['code'], check.string)])
   async oAuthLogin(ctx) {
-    try {
-      const token = await this.github.getToken(
-        ctx.request.body.code,
-        ctx.request.body.clientId,
-      )
+    const token = await this.github.getToken(
+      ctx.request.body.code,
+      ctx.request.body.clientId,
+    )
 
-      ctx.body = { token }
-    } catch (err) {
-      ctx.throw(err)
-    }
+    ctx.body = { token }
   }
 }

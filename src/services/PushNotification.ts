@@ -1,24 +1,23 @@
-import { Logger } from '../Logger'
+import * as Expo from 'expo-server-sdk'
 import { EntitySchema, MongoEntityManager } from 'typeorm'
 
-import { User } from '../../entity/User'
+import { Logger } from './Logger'
+import { User } from '../entity/User'
+
+const expo = new Expo()
 
 export class PushNotification {
-  logger: Logger
-  dbClient: MongoEntityManager
-  expo: any
+  constructor(
+    private logger: Logger,
+    private dbClient: Partial<MongoEntityManager>,
+  ) {}
 
-  constructor({ expo, logger, dbClient }) {
-    this.logger = logger
-    this.dbClient = dbClient
-    this.expo = expo
-  }
-
-  async dispatchNotifications(notification: any) {
+  async dispatchNotifications(notification: any): Promise<void> {
     const users = await this.dbClient.find<User>('User')
     const messages = []
 
     for (const { login, pushToken } of users) {
+      /* istanbul ignore next */
       if (login === notification.sender.login) {
         messages.push({
           to: pushToken,
@@ -29,10 +28,10 @@ export class PushNotification {
       }
     }
 
-    const chunks = this.expo.chunkPushNotifications(messages)
+    const chunks = expo.chunkPushNotifications(messages)
 
     for (const chunk of chunks) {
-      const receipts = await this.expo.sendPushNotificationsAsync(chunk)
+      const receipts = await expo.sendPushNotificationsAsync(chunk)
 
       this.logger.info(
         `Push Notification => ${notification.sender.login}`,

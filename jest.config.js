@@ -1,11 +1,15 @@
 module.exports = {
   testEnvironment: 'node',
   collectCoverageFrom: [
-    'src/**/*'
+    'src/**/*',
+    '!src/database.ts',
+    '!src/entity/*.ts',
+    '!src/services/helpers/GithubUser.ts',
+    '!src/services/Logger.ts'
   ],
   coverageThreshold: {
     global: {
-      branches: 50,
+      branches: 80,
       functions: 80,
       lines: 80,
       statements: 80

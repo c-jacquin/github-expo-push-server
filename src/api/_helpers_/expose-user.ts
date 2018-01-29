@@ -1,5 +1,4 @@
 import * as checkTypes from 'check-types'
-import { GithubUser } from '../../services/Github/GithubUser'
 import { asValue } from 'awilix'
 
 /**
@@ -7,17 +6,18 @@ import { asValue } from 'awilix'
  * the corresponding login on github api.
  */
 export const exposeUser = async (ctx, next) => {
-  const container = ctx.state.container.github
+  const container = ctx.state.container
 
-  const user = await container.github.getLogin(
-    ctx.request.headers.authorization,
-  )
+  const github = container.resolve('github')
 
-  if (!(user instanceof GithubUser)) {
+  const user = await github.getUser(ctx.request.headers.authorization)
+
+  /* istanbul ignore if */
+  if (!user) {
     ctx.throw(400, 'something is wrong with the github api')
+  } else {
+    container.register('user', asValue(user))
   }
-
-  container.register('user', asValue(user))
 
   await next()
 }

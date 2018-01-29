@@ -19,6 +19,7 @@ export const validateParams = (
 ) => async (ctx, next) => {
   const container = R.path(containerPath, ctx)
 
+  /* istanbul ignore if */
   if (!container) {
     ctx.state.container.logger.warn('Invalid param container:', container, {
       requestId: ctx.requestId,
@@ -32,10 +33,10 @@ export const validateParams = (
 
 const assertValid = (ctx, container, validator) => param => {
   if (!container[param]) {
-    ctx.throw(400, `${param} is required.`)
+    ctx.throw(400, `${container} ${param} is required.`)
   }
 
   if (validator && !validator(container[param])) {
-    ctx.throw(400, `${param} is invalid.`)
+    ctx.throw(400, `${container} ${param} is invalid.`)
   }
 }

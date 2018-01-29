@@ -7,17 +7,23 @@ import { MongoEntityManager } from 'typeorm'
 import { asValue } from 'awilix'
 import { loadControllers, scopePerRequest } from 'awilix-koa'
 
-import { container, Env, Logger } from './services'
-import { connectDatabase } from './database'
-import { errorResponder, generateRequestId } from './middleware'
-
 export const app = new Koa()
 
-async function startFunction() {
+import { container } from './container'
+import { Logger } from './services/Logger'
+import { Env } from './services/Env'
+import { connectDatabase } from './database'
+import { errorResponder } from './middleware/error-responder'
+import { generateRequestId } from './middleware/request-id-generator'
+
+/* tslint:disable */
+(async () => {
+
+/* tslint:enable */
   const logger = container.resolve<Logger>('logger')
   const env = container.resolve<Env>('env')
 
-  /* istanbul ignore if */
+  /* istanbul ignore next */
   if (env.REQUEST_LOGS) {
     const format =
       '[RQID=:request-id] - :remote-user' +
@@ -32,7 +38,9 @@ async function startFunction() {
 
     container.register<MongoEntityManager>('dbClient', asValue(mongoManager))
   } catch (err) {
+    /* istanbul ignore next */
     logger.error('database connection error: ', err)
+    /* istanbul ignore next */
     process.exit(1)
   }
 
@@ -43,12 +51,10 @@ async function startFunction() {
     .use(generateRequestId)
     .use(errorResponder)
     .use(loadControllers('./api/**/index.ts', { cwd: __dirname }))
-    .listen(env.PORT)
 
-  logger.info(`Starting server on port ${env.PORT}`)
-}
-
-/* istanbul ignore if */
-if (require.main === module) {
-  startFunction()
-}
+  /* istanbul ignore if */
+  if (require.main === module) {
+    app.listen(env.PORT)
+    logger.info(`Starting server on port ${env.PORT}`)
+  }
+})()
