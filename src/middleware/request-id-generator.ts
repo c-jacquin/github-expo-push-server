@@ -9,7 +9,6 @@ import { asValue } from 'awilix'
  */
 export const generateRequestId = async (ctx, next) => {
   const id = uuid.v4()
-  // ctx.requestId = id
   const meta = ctx.state.container.resolve('meta')
   meta.requestId = id
   ctx.req.requestId = id // Used by Morgan.

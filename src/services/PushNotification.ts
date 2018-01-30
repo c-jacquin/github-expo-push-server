@@ -27,12 +27,10 @@ export class PushNotification {
         })
       }
     }
-
     const chunks = expo.chunkPushNotifications(messages)
 
     for (const chunk of chunks) {
       const receipts = await expo.sendPushNotificationsAsync(chunk)
-
       this.logger.info(
         `Push Notification => ${notification.sender.login}`,
         receipts,

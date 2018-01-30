@@ -2,7 +2,6 @@ import 'jest'
 import * as supertest from 'supertest'
 import { app } from '../../../app'
 import { Github } from '../../../services/Github'
-
 jest.mock('../../../services/Github')
 
 const request = supertest.agent(app.listen())

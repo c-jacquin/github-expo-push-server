@@ -2,6 +2,7 @@ module.exports = {
   testEnvironment: 'node',
   collectCoverageFrom: [
     'src/**/*',
+    '!src/**/*.json',
     '!src/database.ts',
     '!src/entity/*.ts',
     '!src/services/helpers/GithubUser.ts',

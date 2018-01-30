@@ -6,11 +6,12 @@ export const errorResponder = async (ctx, next) => {
   } catch (err) {
     const logger = ctx.state.container.resolve('logger')
     const { requestId } = ctx.state.container.resolve('meta')
+    const i18n = ctx.state.container.resolve('i18n')
 
     /* istanbul ignore next */
     ctx.status = err.status || UNKNOWN_ERROR_CODE
-    /* istanbul ignore next */
-    ctx.body = err.message || ''
+
+    ctx.body = err.originalError ? i18n.translate(err.message) : err.message
 
     logger.error(`${ctx.status} response: ${ctx.body}`, {
       requestId,
