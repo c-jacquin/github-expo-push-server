@@ -95,7 +95,7 @@ export default class PushApi {
       await this.dbClient.findOneAndUpdate('User', { login }, ctx.request.body)
 
       ctx.body = {
-        message: 'profile updated.',
+        message: this.i18n.translate('profile.update.success'),
       }
     } catch (err) {
       ctx.throw(400, 'profile.update.error', { originalError: err })
