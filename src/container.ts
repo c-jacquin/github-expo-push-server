@@ -9,6 +9,8 @@ import {
 import { Env } from './services/Env'
 import { Github } from './services/Github'
 import { Http } from './services/Http'
+import { I18n } from './services/I18n'
+import { Meta, meta } from './services/Meta'
 import { Logger } from './services/Logger'
 import { PushNotification } from './services/PushNotification'
 
@@ -22,18 +24,11 @@ export const asSingleton = <T>(Service) => {
   })
 }
 
-interface Meta {
-  requestId: string
-}
-
-const meta = {
-  requestId: '',
-}
-
 container.register({
   env: asSingleton<Env>(Env),
   github: asSingleton<Github>(Github),
   http: asSingleton<Http>(Http),
+  i18n: asSingleton<I18n>(I18n),
   logger: asSingleton<Logger>(Logger),
   meta: asValue<Meta>(meta),
   pushNotification: asSingleton<PushNotification>(PushNotification),

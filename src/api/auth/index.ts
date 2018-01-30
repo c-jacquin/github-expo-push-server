@@ -11,11 +11,15 @@ export default class AuthApi {
   @POST()
   @before([validateParams(['request', 'body'], ['code'], check.string)])
   async oAuthLogin(ctx) {
-    const token = await this.github.getToken(
-      ctx.request.body.code,
-      ctx.request.body.clientId,
-    )
+    try {
+      const token = await this.github.getToken(
+        ctx.request.body.code,
+        ctx.request.body.clientId,
+      )
 
-    ctx.body = { token }
+      ctx.body = { token }
+    } catch (err) {
+      ctx.throw(400, 'login.error', { originalError: err })
+    }
   }
 }

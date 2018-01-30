@@ -5,6 +5,7 @@ import * as check from 'check-types'
 import { validateParams } from '../_helpers_/validate-params'
 import { exposeUser } from '../_helpers_/expose-user'
 import { PushNotification } from '../../services/PushNotification'
+import { I18n } from '../../services/I18n'
 
 @route('/push')
 export default class PushApi {
@@ -22,6 +23,7 @@ export default class PushApi {
   constructor(
     private pushNotification: PushNotification,
     private dbClient: MongoEntityManager,
+    private i18n: I18n,
   ) {}
 
   @POST()
@@ -34,9 +36,13 @@ export default class PushApi {
     ),
   ])
   async push(ctx) {
-    await this.pushNotification.dispatchNotifications(ctx.request.body)
+    try {
+      await this.pushNotification.dispatchNotifications(ctx.request.body)
 
-    ctx.body = {}
+      ctx.body = {}
+    } catch (err) {
+      ctx.throw(400, 'push.error', { originalError: err })
+    }
   }
 
   @route('/register')
@@ -56,18 +62,17 @@ export default class PushApi {
       })
 
       ctx.body = {
-        message: 'push notification registered',
+        message: this.i18n.translate('push.register.success'),
       }
     } catch (err) {
       // if duplicate error send a 200 status
       /* istanbul ignore next */
       if (err.code === 11000) {
         ctx.body = {
-          message: 'push notification already registered.',
+          message: this.i18n.translate('push.register.error.exist'),
         }
       } else {
-        /* istanbul ignore next */
-        ctx.throw(err)
+        ctx.throw(400, 'push.register.error', { originalError: err })
       }
     }
   }
@@ -84,12 +89,16 @@ export default class PushApi {
     exposeUser,
   ])
   async pushProfile(ctx) {
-    const { login } = ctx.state.container.resolve('user')
+    try {
+      const { login } = ctx.state.container.resolve('user')
 
-    await this.dbClient.findOneAndUpdate('User', { login }, ctx.request.body)
+      await this.dbClient.findOneAndUpdate('User', { login }, ctx.request.body)
 
-    ctx.body = {
-      message: 'profile updated.',
+      ctx.body = {
+        message: 'profile updated.',
+      }
+    } catch (err) {
+      ctx.throw(400, 'profile.update.error', { originalError: err })
     }
   }
 }

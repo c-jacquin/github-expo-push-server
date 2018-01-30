@@ -17,6 +17,7 @@ import { Env } from './services/Env'
 import { connectDatabase } from './database'
 import { errorResponder } from './middleware/error-responder'
 import { generateRequestId } from './middleware/request-id-generator'
+import { setupI18n } from './middleware/setup-i18n'
 
 /* tslint:disable */
 ;(async () => {
@@ -63,6 +64,7 @@ import { generateRequestId } from './middleware/request-id-generator'
     .use(bodyParser())
     .use(scopePerRequest(container))
     .use(generateRequestId)
+    .use(setupI18n)
     .use(errorResponder)
     .use(loadControllers('./api/**/index.ts', { cwd: __dirname }))
 
