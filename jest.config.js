@@ -5,7 +5,7 @@ module.exports = {
     '!src/**/*.json',
     '!src/database.ts',
     '!src/entity/*.ts',
-    '!src/services/helpers/GithubUser.ts',
+    '!src/services/models/*.ts',
     '!src/services/Logger.ts'
   ],
   coverageThreshold: {
