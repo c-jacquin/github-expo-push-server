@@ -1,27 +1,27 @@
-import { setupI18n } from '../setup-i18n'
-import { container } from '../../container'
+import { container } from '../../container';
+import { setupI18n } from '../setup-i18n';
 
 describe('setup-i18n middleware', () => {
-  let i18n
+  let i18n;
 
   beforeEach(() => {
-    i18n = container.resolve('i18n')
-  })
+    i18n = container.resolve('i18n');
+  });
 
   it('should store the locale set in the Content-Language', async () => {
     const ctx = {
-      state: {
-        container,
-      },
       request: {
         headers: {
           'Content-Language': 'fr',
         },
       },
-    }
-    const next = () => Promise.resolve({})
+      state: {
+        container,
+      },
+    };
+    const next = () => Promise.resolve({});
 
-    setupI18n(ctx, next)
-    expect(i18n.locale()).toBe('fr')
-  })
-})
+    setupI18n(ctx, next);
+    expect(i18n.locale()).toBe('fr');
+  });
+});

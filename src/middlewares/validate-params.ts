@@ -1,4 +1,4 @@
-import * as R from 'ramda'
+import * as R from 'ramda';
 
 /**
  * Middleware that checks for required parameters.
@@ -15,27 +15,27 @@ export const validateParams = (
   params: string[],
   validator: (param: any) => boolean,
 ) => async (ctx, next) => {
-  const container = R.path(containerPath, ctx)
+  const container = R.path(containerPath, ctx);
   /* istanbul ignore if */
   if (!container) {
-    const logger = ctx.state.container.resolve('Logger')
+    const logger = ctx.state.container.resolve('Logger');
 
     logger.warn('Invalid param container:', container, {
       requestId: ctx.requestId,
-    })
-    ctx.throw(400, 'Bad request')
+    });
+    ctx.throw(400, 'Bad request');
   }
 
-  R.forEach(assertValid(ctx, container, validator), params)
-  await next()
-}
+  R.forEach(assertValid(ctx, container, validator), params);
+  await next();
+};
 
 const assertValid = (ctx, container, validator) => param => {
   if (!container[param]) {
-    ctx.throw(400, `${container.toString()} ${param} is required.`)
+    ctx.throw(400, `${container.toString()} ${param} is required.`);
   }
 
   if (validator && !validator(container[param])) {
-    ctx.throw(400, `${container.toString()} ${param} is invalid.`)
+    ctx.throw(400, `${container.toString()} ${param} is invalid.`);
   }
-}
+};

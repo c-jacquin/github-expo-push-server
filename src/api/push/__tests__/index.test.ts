@@ -1,40 +1,40 @@
-import 'jest'
-import * as supertest from 'supertest'
-import { PushNotification } from '../../../services/PushNotification'
-import { app } from '../../../app'
-import { connectDatabase } from '../../../database'
+import 'jest';
+import * as supertest from 'supertest';
+import { app } from '../../../app';
+import { connectDatabase } from '../../../database';
+import { PushNotification } from '../../../services/PushNotification';
 
-const request = supertest.agent(app.listen())
+const request = supertest.agent(app.listen());
 
-jest.mock('../../../services/Github')
-jest.mock('../../../services/Http')
-jest.mock('../../../services/PushNotification')
+jest.mock('../../../services/Github');
+jest.mock('../../../services/Http');
+jest.mock('../../../services/PushNotification');
 
 describe('Push Notification', () => {
   beforeAll(async () => {
-    await connectDatabase()
-  })
+    await connectDatabase();
+  });
 
   describe('POST /push', () => {
     it('should respond with a success message', async () => {
       const spy = jest.spyOn(
         PushNotification.prototype,
         'dispatchNotifications',
-      )
+      );
 
       await request
         .post('/push')
         .send({
           action: 'edited',
-          sender: { login: 'test' },
           issue: { user: {} },
           repository: { owner: {} },
+          sender: { login: 'test' },
         })
-        .expect(200, {})
+        .expect(200, {});
 
-      expect(spy).toHaveBeenCalled()
-    })
-  })
+      expect(spy).toHaveBeenCalled();
+    });
+  });
 
   describe('POST /push/register', () => {
     it('should respond with a success message', () => {
@@ -47,9 +47,9 @@ describe('Push Notification', () => {
         })
         .expect(200, {
           message: 'Succesfully subscribe to push notifications.',
-        })
-    })
-  })
+        });
+    });
+  });
 
   describe('PUT /push/profile', () => {
     it('should respond with a success message', () => {
@@ -59,13 +59,13 @@ describe('Push Notification', () => {
         .send({
           login: 'test',
           profile: {
+            pushCommit: false,
             pushEnabled: true,
             pushIssue: true,
-            pushCommit: false,
             pushPr: false,
           },
         })
-        .expect(200, { message: 'profile updated.' })
-    })
-  })
-})
+        .expect(200, { message: 'profile updated.' });
+    });
+  });
+});
