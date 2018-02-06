@@ -1,6 +1,6 @@
 import { Env } from './Env'
 import { Http } from './Http'
-import { GithubUser } from './helpers/GithubUser'
+import { GithubUser } from './models/GithubUser'
 
 export class Github {
   constructor(private env: Env, private http: Http) {}
@@ -12,8 +12,7 @@ export class Github {
       code,
       accept: 'json',
     })
-
-    return result.data.access_token
+    return result.data.split('=')[1].split('&')[0]
   }
 
   async getUser(token: string): Promise<GithubUser> {
