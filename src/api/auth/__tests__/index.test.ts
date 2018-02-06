@@ -2,11 +2,16 @@ import 'jest'
 import * as supertest from 'supertest'
 import { app } from '../../../app'
 import { Github } from '../../../services/Github'
+import { connectDatabase } from '../../../database'
+
 jest.mock('../../../services/Github')
 
 const request = supertest.agent(app.listen())
 
 describe('Authentication', () => {
+  beforeAll(async () => {
+    await connectDatabase()
+  })
   describe('POST /auth', () => {
     it('should call the github getToken method', async () => {
       const spy = jest.spyOn(Github.prototype, 'getToken')

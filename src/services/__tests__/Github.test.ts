@@ -25,9 +25,7 @@ describe('Github service', () => {
   it('getToken => should fetch a github token', async () => {
     const scope = nock('https://github.com/login/oauth')
       .post('/access_token')
-      .reply(200, {
-        access_token: '123ABC',
-      })
+      .reply(200, 'access_token=123ABC&')
 
     const token = await githubService.getToken('code', 'clientId')
 

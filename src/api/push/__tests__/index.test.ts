@@ -2,18 +2,20 @@ import 'jest'
 import * as supertest from 'supertest'
 import { PushNotification } from '../../../services/PushNotification'
 import { app } from '../../../app'
+import { connectDatabase } from '../../../database'
 
 const request = supertest.agent(app.listen())
 
 jest.mock('../../../services/Github')
 jest.mock('../../../services/Http')
-// jest.mock('../../../services/PushNotification')
+jest.mock('../../../services/PushNotification')
 
 describe('Push Notification', () => {
+  beforeAll(async () => {
+    await connectDatabase()
+  })
+
   describe('POST /push', () => {
-    beforeEach(() => {
-      process.env.TEST_FAILS = undefined
-    })
     it('should respond with a success message', async () => {
       const spy = jest.spyOn(
         PushNotification.prototype,
@@ -22,19 +24,15 @@ describe('Push Notification', () => {
 
       await request
         .post('/push')
-        .send({ sender: { login: 'foo' }, action: 'test' })
+        .send({
+          action: 'edited',
+          sender: { login: 'test' },
+          issue: { user: {} },
+          repository: { owner: {} },
+        })
         .expect(200, {})
 
       expect(spy).toHaveBeenCalled()
-    })
-
-    it('should respond with a tranlated error message if pushNotification service fail', () => {
-      process.env.TEST_FAIL = 'true'
-
-      return request
-        .post('/push')
-        .send({ action: 'test', sender: { login: 'test' } })
-        .expect(400)
     })
   })
 
@@ -54,10 +52,6 @@ describe('Push Notification', () => {
   })
 
   describe('PUT /push/profile', () => {
-    beforeEach(() => {
-      process.env.TEST_FAIL = undefined
-    })
-
     it('should respond with a success message', () => {
       return request
         .put('/push/profile')
@@ -72,26 +66,6 @@ describe('Push Notification', () => {
           },
         })
         .expect(200, { message: 'profile updated.' })
-    })
-
-    it('should respond with an error message and 404 status', async () => {
-      process.env.TEST_FAIL = 'true'
-
-      const response = await request
-        .put('/push/profile')
-        .set({ authorization: 'token' })
-        .send({
-          login: 'test',
-          profile: {
-            pushEnabled: true,
-            pushIssue: true,
-            pushCommit: false,
-            pushPr: false,
-          },
-        })
-        .expect(400)
-
-      // console.log(response)
     })
   })
 })

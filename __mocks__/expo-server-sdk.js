@@ -6,9 +6,6 @@ class Expo {
     return [{ foo: 'bar' }]
   }
   sendPushNotificationsAsync() {
-    if (process.env.TEST_FAIL) {
-      throw new Error('FAIIIIIL')
-    }
     return Promise.resolve({})
   }
 }

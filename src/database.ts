@@ -5,11 +5,14 @@ import {
   MongoRepository,
   MongoEntityManager,
 } from 'typeorm'
+import { container } from './container'
 import { Env } from './services/Env'
 import { User } from './entity/User'
 import { AwilixContainer, asValue } from 'awilix'
 
-export const connectDatabase = async (env: Env, container: AwilixContainer) => {
+export const connectDatabase = async (): Promise<void> => {
+  const env = container.resolve<Env>('env')
+
   await createConnection({
     type: env.TYPEORM_CONNECTION,
     url: env.TYPEORM_URL,
