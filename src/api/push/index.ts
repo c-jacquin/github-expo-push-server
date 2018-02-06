@@ -1,11 +1,12 @@
 import { before, route, POST, PUT } from 'awilix-koa'
-import { MongoEntityManager } from 'typeorm'
+import { MongoEntityManager, MongoRepository } from 'typeorm'
 import * as Expo from 'expo-server-sdk'
 import * as check from 'check-types'
 import { validateParams } from '../_helpers_/validate-params'
 import { exposeUser } from '../_helpers_/expose-user'
 import { PushNotification } from '../../services/PushNotification'
 import { I18n } from '../../services/I18n'
+import { User } from '../../entity/User'
 
 @route('/push')
 export default class PushApi {
@@ -22,7 +23,8 @@ export default class PushApi {
 
   constructor(
     private pushNotification: PushNotification,
-    private dbClient: MongoEntityManager,
+    private dbManager: MongoEntityManager,
+    private userRepository: MongoRepository<User>,
     private i18n: I18n,
   ) {}
 
@@ -55,11 +57,11 @@ export default class PushApi {
   async register(ctx) {
     try {
       const { login } = ctx.state.container.resolve('user')
+      const user = new User()
+      user.login = login
+      user.pushToken = ctx.request.body.pushToken
 
-      await this.dbClient.save('User', {
-        ...ctx.request.body,
-        login,
-      })
+      await this.dbManager.save(user)
 
       ctx.body = {
         message: this.i18n.translate('push.register.success'),
@@ -72,7 +74,7 @@ export default class PushApi {
           message: this.i18n.translate('push.register.error.exist'),
         }
       } else {
-        ctx.throw(400, 'push.register.error', { originalError: err })
+        ctx.throw(400, 'push.register.error.default', { originalError: err })
       }
     }
   }
@@ -92,7 +94,7 @@ export default class PushApi {
     try {
       const { login } = ctx.state.container.resolve('user')
 
-      await this.dbClient.findOneAndUpdate('User', { login }, ctx.request.body)
+      await this.userRepository.findOneAndUpdate({ login }, ctx.request.body)
 
       ctx.body = {
         message: this.i18n.translate('profile.update.success'),

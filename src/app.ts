@@ -5,8 +5,13 @@ import * as Koa from 'koa'
 import * as bodyParser from 'koa-bodyparser'
 import * as helmet from 'koa-helmet'
 import * as morgan from 'koa-morgan'
-import { MongoEntityManager } from 'typeorm'
-import { asValue } from 'awilix'
+import {
+  MongoEntityManager,
+  ObjectID,
+  getMongoRepository,
+  getMongoManager,
+} from 'typeorm'
+import { asValue, Resolver } from 'awilix'
 import { loadControllers, scopePerRequest } from 'awilix-koa'
 
 export const app = new Koa()
@@ -19,7 +24,10 @@ import { errorResponder } from './middleware/error-responder'
 import { generateRequestId } from './middleware/request-id-generator'
 import { setupI18n } from './middleware/setup-i18n'
 
+import { User } from './entity/User'
+
 /* tslint:disable */
+import { MongoRepository } from 'typeorm/repository/MongoRepository'
 ;(async () => {
   /* tslint:enable */
   const logger = container.resolve<Logger>('logger')
@@ -49,9 +57,7 @@ import { setupI18n } from './middleware/setup-i18n'
   }
 
   try {
-    const { mongoManager } = await connectDatabase(env)
-
-    container.register<MongoEntityManager>('dbClient', asValue(mongoManager))
+    await connectDatabase(env, container)
   } catch (err) {
     /* istanbul ignore next */
     logger.error('database connection error: ', err)
