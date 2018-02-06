@@ -13,9 +13,14 @@ export const errorResponder = async (ctx, next) => {
 
     ctx.body = err.originalError ? i18n.translate(err.message) : err.message
 
-    logger.error(`${ctx.status} response: ${ctx.body}`, {
-      requestId,
-    })
+    logger.error(
+      `${ctx.status} response: ${
+        err.originalError ? err.originalError.message : err.message
+      }`,
+      {
+        requestId,
+      },
+    )
     /* istanbul ignore if */
     if (ctx.status === UNKNOWN_ERROR_CODE) {
       logger.error(`${err.stack}`, { requestId })
