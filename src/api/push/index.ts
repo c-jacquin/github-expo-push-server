@@ -1,25 +1,25 @@
-import { before, route, POST, PUT } from 'awilix-koa'
-import { MongoEntityManager, MongoRepository } from 'typeorm'
-import * as Expo from 'expo-server-sdk'
-import * as check from 'check-types'
-import { validateParams } from '../../middlewares/validate-params'
-import { exposeUser } from '../../middlewares/expose-user'
-import { PushNotification } from '../../services/PushNotification'
-import { I18n } from '../../services/I18n'
-import { User } from '../../entity/User'
+import { before, POST, PUT, route } from 'awilix-koa';
+import * as check from 'check-types';
+import * as Expo from 'expo-server-sdk';
+import { MongoEntityManager, MongoRepository } from 'typeorm';
+import { User } from '../../entity/User';
+import { exposeUser } from '../../middlewares/expose-user';
+import { validateParams } from '../../middlewares/validate-params';
+import { I18n } from '../../services/I18n';
+import { PushNotification } from '../../services/PushNotification';
 
 @route('/push')
 export default class PushApi {
-  static validatePushProfile = settings => {
+  public static validatePushProfile = settings => {
     return (
       check.boolean(settings.pushEnabled) &&
       check.boolean(settings.pushIssue) &&
       check.boolean(settings.pushCommit) &&
       check.boolean(settings.pushPr)
-    )
-  }
+    );
+  };
 
-  static validateGithubSender = sender => !!sender.login
+  public static validateGithubSender = sender => !!sender.login;
 
   constructor(
     private pushNotification: PushNotification,
@@ -37,13 +37,13 @@ export default class PushApi {
       PushApi.validateGithubSender,
     ),
   ])
-  async push(ctx) {
+  public async push(ctx) {
     try {
-      await this.pushNotification.dispatchNotifications(ctx.request.body)
+      await this.pushNotification.dispatchNotifications(ctx.request.body);
 
-      ctx.body = {}
+      ctx.body = {};
     } catch (err) {
-      ctx.throw(400, 'push.error', { originalError: err })
+      ctx.throw(400, 'push.error', { originalError: err });
     }
   }
 
@@ -54,27 +54,27 @@ export default class PushApi {
     validateParams(['request', 'body'], ['pushToken'], Expo.isExpoPushToken),
     exposeUser,
   ])
-  async register(ctx) {
+  public async register(ctx) {
     try {
-      const { login } = ctx.state.container.resolve('user')
-      const user = new User()
-      user.login = login
-      user.pushToken = ctx.request.body.pushToken
+      const { login } = ctx.state.container.resolve('user');
+      const user = new User();
+      user.login = login;
+      user.pushToken = ctx.request.body.pushToken;
 
-      await this.dbManager.save(user)
+      await this.dbManager.save(user);
 
       ctx.body = {
         message: this.i18n.translate('push.register.success'),
-      }
+      };
     } catch (err) {
       // if duplicate error send a 200 status
       /* istanbul ignore next */
       if (err.code === 11000) {
         ctx.body = {
           message: this.i18n.translate('push.register.error.exist'),
-        }
+        };
       } else {
-        ctx.throw(400, 'push.register.error.default', { originalError: err })
+        ctx.throw(400, 'push.register.error.default', { originalError: err });
       }
     }
   }
@@ -90,17 +90,17 @@ export default class PushApi {
     ),
     exposeUser,
   ])
-  async pushProfile(ctx) {
+  public async pushProfile(ctx) {
     try {
-      const { login } = ctx.state.container.resolve('user')
+      const { login } = ctx.state.container.resolve('user');
 
-      await this.userRepository.findOneAndUpdate({ login }, ctx.request.body)
+      await this.userRepository.findOneAndUpdate({ login }, ctx.request.body);
 
       ctx.body = {
         message: this.i18n.translate('profile.update.success'),
-      }
+      };
     } catch (err) {
-      ctx.throw(400, 'profile.update.error', { originalError: err })
+      ctx.throw(400, 'profile.update.error', { originalError: err });
     }
   }
 }

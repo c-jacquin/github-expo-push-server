@@ -1,29 +1,29 @@
-import { Logger as WinstonLogger, transports } from 'winston'
+import { Logger as WinstonLogger, transports } from 'winston';
 
-import { Env } from './Env'
+import { Env } from './Env';
 
 const formatter = options =>
   options.meta && options.meta.requestId
     ? `[RQID=${options.meta.requestId}] ${options.message}`
-    : `${options.message}`
+    : `${options.message}`;
 
 export class Logger extends WinstonLogger {
-  static COMBINED_FILE = 'log/combined.log'
+  public static COMBINED_FILE = 'log/combined.log';
 
   constructor(env: Env) {
     super({
       transports: [
         new transports.Console({
           colorize: true,
-          level: env.LOG_LEVEL,
           formatter,
+          level: env.LOG_LEVEL,
         }),
         new transports.File({
           filename: Logger.COMBINED_FILE,
-          level: env.LOG_LEVEL,
           formatter,
+          level: env.LOG_LEVEL,
         }),
       ],
-    })
+    });
   }
 }

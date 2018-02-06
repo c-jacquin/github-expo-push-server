@@ -1,30 +1,30 @@
 import {
-  Entity,
   Column,
-  PrimaryColumn,
+  Entity,
   ObjectID,
   ObjectIdColumn,
-} from 'typeorm'
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
-  @ObjectIdColumn() id: ObjectID
+  @ObjectIdColumn() public id: ObjectID;
 
   @Column({ unique: true })
-  login: string
+  public login: string;
 
   @Column({ unique: true })
-  pushToken: string
+  public pushToken: string;
 
   @Column({ default: true })
-  pushEnabled: boolean
+  public pushEnabled: boolean;
 
   @Column({ default: true })
-  pushCommit: boolean
+  public pushCommit: boolean;
 
   @Column({ default: true })
-  pushIssue: boolean
+  public pushIssue: boolean;
 
   @Column({ default: true })
-  pushPr: boolean
+  public pushPr: boolean;
 }

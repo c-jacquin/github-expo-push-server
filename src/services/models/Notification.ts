@@ -1,18 +1,18 @@
-import { I18n } from '../I18n'
-import { GithubUser } from './GithubUser'
-import { GithubNotification } from './GithubNotification'
+import { I18n } from '../I18n';
+import { GithubNotification } from './GithubNotification';
+import { GithubUser } from './GithubUser';
 
 export class Notification {
-  static supportedNotifications = ['commit', 'issue']
+  public static supportedNotifications = ['commit', 'issue'];
 
-  public to: string
-  public body: string
-  public sound = 'default'
-  public data: any
+  public to: string;
+  public body: string;
+  public sound = 'default';
+  public data: any;
 
   constructor(to: string, data: GithubNotification, private i18n: I18n) {
-    const type = this.getType(data)
-    this.to = to
+    const type = this.getType(data);
+    this.to = to;
 
     if (data.issue) {
       this.body = i18n.translate('notification.body', {
@@ -20,51 +20,51 @@ export class Notification {
         title: data.issue.title,
         type: this.i18n.translate(`notification.type.${type}`),
         user: this.formatUser(data.issue.user).login,
-      })
+      });
 
       this.data = {
-        id: data.issue.id,
         action: data.action,
-        type,
-        url: data.issue.url,
-        title: data.issue.title,
-        user: this.formatUser(data.issue.user),
-        createdAt: data.issue.created_at,
-        updatedAt: data.issue.updated_at,
         authorAssociation: data.issue.author_association,
+        createdAt: data.issue.created_at,
+        id: data.issue.id,
         repository: {
           id: data.repository.id,
+          language: data.repository.language,
           name: data.repository.full_name,
           owner: this.formatUser(data.repository.owner),
-          url: data.repository.url,
-          language: data.repository.language,
           stargazers: data.repository.stargazers,
+          url: data.repository.url,
         },
-      }
+        title: data.issue.title,
+        type,
+        updatedAt: data.issue.updated_at,
+        url: data.issue.url,
+        user: this.formatUser(data.issue.user),
+      };
     }
   }
 
   private getType(data): string {
-    let type = ''
+    let type = '';
 
     if (data.issue) {
-      type = 'issue'
+      type = 'issue';
     } else if (data.commit) {
-      type = 'commit'
+      type = 'commit';
     }
 
     if (!Notification.supportedNotifications.includes(type)) {
-      throw new Error('unsuported notification')
+      throw new Error('unsuported notification');
     }
 
-    return type
+    return type;
   }
 
   private formatUser(user: GithubUser) {
     return {
+      avatarurl: user.avatar_url,
       id: user.id,
       login: user.login,
-      avatarurl: user.avatar_url,
-    }
+    };
   }
 }

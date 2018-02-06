@@ -22,9 +22,8 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "precommit": "lint-staged",
     "cz": "git-cz",
-    "lint": "tslint src/**/*.ts --fix",
-    "docs": "raml2html -i api.raml -o docs/index.html",
-    "prettier": "prettier --write src/**/*.ts"
+    "lint": "tslint --project . --fix",
+    "docs": "raml2html -i api.raml -o docs/index.html"
   },
   "dependencies": {
     "@types/supertest": "^2.0.4",
@@ -44,6 +43,7 @@
     "node-polyglot": "^2.2.2",
     "pm2": "^2.9.3",
     "ramda": "^0.25.0",
+    "reflect-metadata": "^0.1.12",
     "request": "^2.83.0",
     "typeorm": "^0.1.11",
     "typescript": "^2.6.2",
@@ -91,7 +91,7 @@
   },
   "lint-staged": {
     "src/**/*(*.ts|*.tsx)": [
-      "yarn lint",
+      "lint --fix",
       "git add -A"
     ]
   }

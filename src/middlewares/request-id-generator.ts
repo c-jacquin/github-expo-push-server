@@ -1,5 +1,5 @@
-import * as uuid from 'uuid'
-import { asValue } from 'awilix'
+import { asValue } from 'awilix';
+import * as uuid from 'uuid';
 
 /**
  * Attaches a unique ID to each incoming request. We can use this when writing
@@ -8,9 +8,9 @@ import { asValue } from 'awilix'
  * multiple, interleaved incoming requests.
  */
 export const generateRequestId = async (ctx, next) => {
-  const id = uuid.v4()
-  const meta = ctx.state.container.resolve('meta')
-  meta.requestId = id
-  ctx.req.requestId = id // Used by Morgan.
-  await next()
-}
+  const id = uuid.v4();
+  const meta = ctx.state.container.resolve('meta');
+  meta.requestId = id;
+  ctx.req.requestId = id; // Used by Morgan.
+  await next();
+};

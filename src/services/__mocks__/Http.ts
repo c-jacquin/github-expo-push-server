@@ -1,15 +1,15 @@
-import * as axios from 'axios'
+import * as axios from 'axios';
 
 export class Http {
-  get(uri: string, config?: axios.AxiosRequestConfig) {
-    return Promise.resolve({ data: {} })
+  public get(uri: string, config?: axios.AxiosRequestConfig) {
+    return Promise.resolve({ data: {} });
   }
 
-  post(uri: string, body: any, config?: axios.AxiosRequestConfig) {
-    return Promise.resolve({ data: {} })
+  public post(uri: string, body: any, config?: axios.AxiosRequestConfig) {
+    return Promise.resolve({ data: {} });
   }
 
-  put(uri: string, body: any, config?: axios.AxiosRequestConfig) {
-    return Promise.resolve({ data: {} })
+  public put(uri: string, body: any, config?: axios.AxiosRequestConfig) {
+    return Promise.resolve({ data: {} });
   }
 }

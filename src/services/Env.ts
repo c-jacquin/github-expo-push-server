@@ -1,19 +1,19 @@
 export class Env {
-  DEFAULT_LOCALE: string
-  GITHUB_API: string
-  GITHUB_TOKEN_URI: string
-  GITHUB_SECRET: string
-  LOG_LEVEL: string
-  NODE_ENV: string
-  PORT: number
-  REQUEST_LOGS: boolean
-  TYPEORM_CONNECTION: 'mongodb'
-  TYPEORM_URL: string
-  TYPEORM_SYNCHRONIZE: boolean
-  TYPEORM_LOGGING: boolean
-  TYPEORM_ENTITIES: string[]
+  public DEFAULT_LOCALE: string;
+  public GITHUB_API: string;
+  public GITHUB_TOKEN_URI: string;
+  public GITHUB_SECRET: string;
+  public LOG_LEVEL: string;
+  public NODE_ENV: string;
+  public PORT: number;
+  public REQUEST_LOGS: boolean;
+  public TYPEORM_CONNECTION: 'mongodb';
+  public TYPEORM_URL: string;
+  public TYPEORM_SYNCHRONIZE: boolean;
+  public TYPEORM_LOGGING: boolean;
+  public TYPEORM_ENTITIES: string[];
 
   constructor() {
-    return require('yenv')()
+    return require('yenv')();
   }
 }
