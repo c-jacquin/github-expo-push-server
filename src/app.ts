@@ -10,6 +10,7 @@ import {
   ObjectID,
   getMongoRepository,
   getMongoManager,
+  MongoRepository,
 } from 'typeorm'
 import { asValue, Resolver } from 'awilix'
 import { loadControllers, scopePerRequest } from 'awilix-koa'
@@ -27,7 +28,6 @@ import { setupI18n } from './middleware/setup-i18n'
 import { User } from './entity/User'
 
 /* tslint:disable */
-import { MongoRepository } from 'typeorm/repository/MongoRepository'
 ;(async () => {
   /* tslint:enable */
   const logger = container.resolve<Logger>('logger')
@@ -56,13 +56,14 @@ import { MongoRepository } from 'typeorm/repository/MongoRepository'
     }
   }
 
-  try {
-    await connectDatabase(env, container)
-  } catch (err) {
-    /* istanbul ignore next */
-    logger.error('database connection error: ', err)
-    /* istanbul ignore next */
-    process.exit(1)
+  /* istanbul ignore if */
+  if (require.main === module) {
+    try {
+      await connectDatabase()
+    } catch (err) {
+      logger.error('database connection error: ', err)
+      process.exit(1)
+    }
   }
 
   app

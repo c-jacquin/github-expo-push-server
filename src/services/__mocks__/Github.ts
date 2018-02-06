@@ -1,4 +1,4 @@
-import { GithubUser } from '../helpers/GithubUser'
+import { GithubUser } from '../models/GithubUser'
 
 export class Github {
   async getToken(code: string, clientId: string): Promise<string> {
