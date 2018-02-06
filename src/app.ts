@@ -21,9 +21,9 @@ import { container } from './container'
 import { Logger } from './services/Logger'
 import { Env } from './services/Env'
 import { connectDatabase } from './database'
-import { errorResponder } from './middleware/error-responder'
-import { generateRequestId } from './middleware/request-id-generator'
-import { setupI18n } from './middleware/setup-i18n'
+import { errorResponder } from './middlewares/error-responder'
+import { generateRequestId } from './middlewares/request-id-generator'
+import { setupI18n } from './middlewares/setup-i18n'
 
 import { User } from './entity/User'
 

@@ -1,7 +1,7 @@
 import { before, route, POST } from 'awilix-koa'
 import * as check from 'check-types'
 
-import { validateParams } from '../_helpers_/validate-params'
+import { validateParams } from '../../middlewares/validate-params'
 import { Github } from '../../services/Github'
 
 @route('/auth')
