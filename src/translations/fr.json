@@ -1,9 +1,29 @@
 {
-  "login.error": "L'authentification n'est pas disponible pour l'instant, veuillez reessayer plus tard.",
-  "push.error": "Les notifications ne sont pas disponible.",
-  "push.register.success": "Abonnement aux notifications.",
-  "push.register.error": "Quelque chose d'inhabituel s'est produit, veuillez reessayer plus tard.",
-  "push.register.error.exist": "Vous etes deja abonner aux notifications.",
-  "profile.update.success": "profil mis a jour.",
-  "profile.update.error": "Quelque chose d'inhabituel s'est produit, votre profil n'a pas ete mis a jour."
+  "login": {
+    "error": "L'authentification n'est pas disponible pour l'instant, veuillez reessayer plus tard."
+  },
+  "notification": {
+    "body": "%{type} %{action}: %{title}",
+    "edited": "edite",
+    "type": {
+      "commit": "Commit",
+      "issue": "Issue"
+    }
+  },
+  "push": {
+    "error": "Les notifications ne sont pas disponible.",
+    "register": {
+      "success": "Abonnement aux notifications.",
+      "error": {
+        "default": "Quelque chose d'inhabituel s'est produit, veuillez reessayer plus tard.",
+        "exist": "Vous etes deja abonner aux notifications."
+      }
+    }
+  },
+  "profile": {
+    "update": {
+      "success": "profil mis a jour.",
+      "error": "Quelque chose d'inhabituel s'est produit, votre profil n'a pas ete mis a jour."
+    }
+  }
 }
