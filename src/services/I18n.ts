@@ -23,7 +23,7 @@ export class I18n extends Polyglot {
     this.extend(I18n.messages[locale])
   }
 
-  translate(phrase: string): string {
-    return this.t(phrase)
+  translate(phrase: string, variables?: any): string {
+    return this.t(phrase, variables)
   }
 }

@@ -1,9 +1,29 @@
 {
-  "login.error": "Login is currently unavailable, please try again later.",
-  "push.error": "Push is currently unavailable, please try again later.",
-  "push.register.success": "Succesfully subscribe to push notifications.",
-  "push.register.error": "Something wrong happen during the notification registration, please try again later.",
-  "push.register.error.exist": "push notification already registered.",
-  "profile.update.success": "profile updated.",
-  "profile.update.error": "Something wrong happen, your profile has not been updated."
+  "login": {
+    "error": "Login is currently unavailable, please try again later."
+  },
+  "notification": {
+    "body": "%{user} %{action} %{type}: %{title}",
+    "edited": "edited",
+    "type": {
+      "commit": "Commit",
+      "issue": "Issue"
+    }
+  },
+  "push": {
+    "error": "Push is currently unavailable, please try again later.",
+    "register": {
+      "success":  "Succesfully subscribe to push notifications.",
+      "error": {
+        "default": "Something wrong happen during the notification registration, please try again later.",
+        "exist": "push notification already registered."
+      }
+    }
+  },
+  "profile": {
+    "update": {
+      "success": "profile updated.",
+      "error": "Something wrong happen, your profile has not been updated."
+    }
+  }
 }
