@@ -1,8 +1,17 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm'
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ObjectID,
+  ObjectIdColumn,
+} from 'typeorm'
 
 @Entity()
 export class User {
-  @PrimaryColumn() login: string
+  @ObjectIdColumn() id: ObjectID
+
+  @Column({ unique: true })
+  login: string
 
   @Column({ unique: true })
   pushToken: string
