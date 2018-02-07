@@ -1,6 +1,14 @@
 import { GithubUser } from './GithubUser';
 
+/* tslint:disable */
 export class GithubNotification {
+  public branches: any;
+  public created_at: string;
+  public updated_at: string;
+  public context: string;
+  public sha: string;
+  public description: string;
+  public id: string;
   public issue: {
     id: string;
     url: string;
@@ -11,6 +19,8 @@ export class GithubNotification {
     author_association: string;
   };
   public action: string;
+  public pull_request: any;
+  public commit: any;
   public type: string;
   public repository: {
     id: string;
@@ -20,4 +30,5 @@ export class GithubNotification {
     language: string;
     stargazers: string;
   };
+  public state: string;
 }

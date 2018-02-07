@@ -1,10 +1,9 @@
 import 'reflect-metadata';
 
-import * as fs from 'fs';
-import * as Koa from 'koa';
-
 import { asValue, Resolver } from 'awilix';
 import { loadControllers, scopePerRequest } from 'awilix-koa';
+import * as fs from 'fs';
+import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as helmet from 'koa-helmet';
 import * as morgan from 'koa-morgan';

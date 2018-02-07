@@ -8,7 +8,8 @@
     "type": {
       "commit": "Commit",
       "issue": "Issue"
-    }
+    },
+    "unsupported": "unsuported notification type: %{type}"
   },
   "push": {
     "error": "Push is currently unavailable, please try again later.",
