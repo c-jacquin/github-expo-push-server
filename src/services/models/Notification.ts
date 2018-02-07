@@ -1,10 +1,9 @@
 import { I18n } from '../I18n';
 import { GithubNotification } from './GithubNotification';
 import { GithubUser } from './GithubUser';
+import { NotificationType } from './NotificationType';
 
 export class Notification {
-  public static supportedNotifications = ['commit', 'issue'];
-
   public to: string;
   public body: string;
   public sound = 'default';
@@ -14,33 +13,39 @@ export class Notification {
     const type = this.getType(data);
     this.to = to;
 
-    if (data.issue) {
-      this.body = i18n.translate('notification.body', {
-        action: i18n.translate(`notification.${data.action}`),
-        title: data.issue.title,
-        type: this.i18n.translate(`notification.type.${type}`),
-        user: this.formatUser(data.issue.user).login,
-      });
+    switch (type) {
+      case NotificationType.ISSUE:
+        this.body = i18n.translate('notification.body', {
+          action: i18n.translate(`notification.${data.action}`),
+          title: data.issue.title,
+          type: this.i18n.translate(`notification.type.${type}`),
+          user: this.formatUser(data.issue.user).login,
+        });
 
-      this.data = {
-        action: data.action,
-        authorAssociation: data.issue.author_association,
-        createdAt: data.issue.created_at,
-        id: data.issue.id,
-        repository: {
-          id: data.repository.id,
-          language: data.repository.language,
-          name: data.repository.full_name,
-          owner: this.formatUser(data.repository.owner),
-          stargazers: data.repository.stargazers,
-          url: data.repository.url,
-        },
-        title: data.issue.title,
-        type,
-        updatedAt: data.issue.updated_at,
-        url: data.issue.url,
-        user: this.formatUser(data.issue.user),
-      };
+        this.data = this.formateIssueData(data);
+        break;
+
+      case NotificationType.PULL_REQUEST:
+        this.body = i18n.translate('notification.body', {
+          action: i18n.translate(`notification.${data.action}`),
+          title: data.issue.title,
+          type: this.i18n.translate(`notification.type.${type}`),
+          user: this.formatUser(data.issue.user).login,
+        });
+
+        this.data = this.formatPullRequestdata(data);
+        break;
+
+      case NotificationType.COMMIT:
+        this.body = i18n.translate('notification.body', {
+          action: i18n.translate(`notification.${data.action}`),
+          title: data.issue.title,
+          type: this.i18n.translate(`notification.type.${type}`),
+          user: this.formatUser(data.issue.user).login,
+        });
+
+        this.data = this.formatCommitdata(data);
+        break;
     }
   }
 
@@ -48,13 +53,13 @@ export class Notification {
     let type = '';
 
     if (data.issue) {
-      type = 'issue';
+      type = NotificationType.ISSUE;
     } else if (data.commit) {
-      type = 'commit';
-    }
-
-    if (!Notification.supportedNotifications.includes(type)) {
-      throw new Error('unsuported notification');
+      type = NotificationType.COMMIT;
+    } else if (data.pull_request) {
+      type = NotificationType.PULL_REQUEST;
+    } else {
+      throw new Error('notification.unsuported');
     }
 
     return type;
@@ -65,6 +70,74 @@ export class Notification {
       avatarurl: user.avatar_url,
       id: user.id,
       login: user.login,
+    };
+  }
+
+  private formatRepository(repository: any) {
+    return {
+      id: repository.id,
+      language: repository.language,
+      name: repository.full_name,
+      owner: this.formatUser(repository.owner),
+      stargazers: repository.stargazers,
+      url: repository.url,
+    };
+  }
+
+  private formateIssueData(data: GithubNotification) {
+    return {
+      action: data.action,
+      authorAssociation: data.issue.author_association,
+      createdAt: data.issue.created_at,
+      id: data.issue.id,
+      repository: this.formatRepository(data.repository),
+      title: data.issue.title,
+      type: this.getType(data),
+      updatedAt: data.issue.updated_at,
+      url: data.issue.url,
+      user: this.formatUser(data.issue.user),
+    };
+  }
+
+  private formatCommitdata(data: GithubNotification) {
+    return {
+      branches: data.branches,
+      commit: data.commit.commit,
+      commiter: this.formatUser(data.commit.commiter),
+      context: data.context,
+      createdAt: data.created_at,
+      description: data.description,
+      id: data.id,
+      repository: this.formatRepository(data.repository),
+      sha: data.sha,
+      state: data.state,
+      updatedAt: data.updated_at,
+    };
+  }
+
+  private formatPullRequestdata(data: GithubNotification) {
+    return {
+      action: data.action,
+      additions: data.pull_request.additions,
+      authorAssociation: data.pull_request.author_association,
+      base: data.pull_request.base,
+      changedFiles: data.pull_request.changedFiles.changed_files,
+      comments: data.pull_request.comments,
+      commits: data.pull_request.commits,
+      createdAt: data.pull_request.created_at,
+      deletions: data.pull_request.deletions,
+      head: data.pull_request.head,
+      id: data.pull_request.id,
+      mergeCommitSha: data.pull_request.merge_commit_sha,
+      mergedBy: this.formatUser(data.pull_request.merged_by),
+      repository: this.formatRepository(data.repository),
+      reviewComments: data.pull_request.review_comments,
+      state: data.state,
+      title: data.pull_request.title,
+      type: this.getType(data),
+      updatedAt: data.pull_request.updated_at,
+      url: data.pull_request.url,
+      user: this.formatUser(data.pull_request.user),
     };
   }
 }

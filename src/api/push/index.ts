@@ -30,7 +30,7 @@ export default class PushApi {
 
   @POST()
   @before([
-    validateParams(['request', 'body'], ['action'], check.string),
+    // validateParams(['request', 'body'], ['action'], check.string),
     validateParams(
       ['request', 'body'],
       ['sender'],
