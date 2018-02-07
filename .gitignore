@@ -30,5 +30,5 @@ node_modules
 .node_repl_history
 
 # Log
-log
+log/combined.log
 .DS_Store
