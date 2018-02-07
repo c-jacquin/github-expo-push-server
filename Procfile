@@ -1,1 +1,1 @@
-web: rm node_modules -rf && yarn install && yarn build && yarn start
+web: yarn build && yarn start
