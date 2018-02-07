@@ -1,4 +1,9 @@
 {
+  "database": {
+    "error": {
+      "connection": "Erreur lors de la connexion a la base de donnees : %{error}"
+    }
+  },
   "login": {
     "error": "L'authentification n'est pas disponible pour l'instant, veuillez reessayer plus tard."
   },
@@ -14,17 +19,20 @@
   "push": {
     "error": "Les notifications ne sont pas disponible.",
     "register": {
-      "success": "Abonnement aux notifications.",
       "error": {
         "default": "Quelque chose d'inhabituel s'est produit, veuillez reessayer plus tard.",
         "exist": "Vous etes deja abonner aux notifications."
-      }
+      },
+      "success": "Abonnement aux notifications."
     }
   },
   "profile": {
     "update": {
-      "success": "profil mis a jour.",
-      "error": "Quelque chose d'inhabituel s'est produit, votre profil n'a pas ete mis a jour."
+      "error": "Quelque chose d'inhabituel s'est produit, votre profil n'a pas ete mis a jour.",
+      "success": "profil mis a jour."
     }
+  },
+  "server": {
+    "listen": "Server demare sur le port %{port}"
   }
 }

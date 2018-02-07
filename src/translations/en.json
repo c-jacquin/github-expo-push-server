@@ -1,4 +1,9 @@
 {
+  "database": {
+    "error": {
+      "connection": "Database connection error : %{error}"
+    }
+  },
   "login": {
     "error": "Login is currently unavailable, please try again later."
   },
@@ -11,20 +16,23 @@
     },
     "unsupported": "unsuported notification type: %{type}"
   },
+  "profile": {
+    "update": {
+      "error": "Something wrong happen, your profile has not been updated.",
+      "success": "profile updated."
+    }
+  },
   "push": {
     "error": "Push is currently unavailable, please try again later.",
     "register": {
-      "success":  "Succesfully subscribe to push notifications.",
       "error": {
-        "default": "Something wrong happen during the notification registration, please try again later.",
-        "exist": "push notification already registered."
-      }
+        "exist": "push notification already registered.",
+        "default": "Something wrong happen during the notification registration, please try again later."
+      },
+      "success":  "Succesfully subscribe to push notifications."
     }
   },
-  "profile": {
-    "update": {
-      "success": "profile updated.",
-      "error": "Something wrong happen, your profile has not been updated."
-    }
+  "server": {
+    "listen": "Server started on port %{port}"
   }
 }

@@ -25,11 +25,13 @@ import { errorResponder } from './middlewares/error-responder';
 import { generateRequestId } from './middlewares/request-id-generator';
 import { setupI18n } from './middlewares/setup-i18n';
 import { Env } from './services/Env';
+import { I18n } from './services/I18n';
 import { Logger } from './services/Logger';
 
 (async () => {
   const logger = container.resolve<Logger>('logger');
   const env = container.resolve<Env>('env');
+  const i18n = container.resolve<I18n>('i18n');
 
   /* istanbul ignore next */
   if (env.REQUEST_LOGS) {
@@ -58,8 +60,8 @@ import { Logger } from './services/Logger';
   if (require.main === module) {
     try {
       await connectDatabase();
-    } catch (err) {
-      logger.error('database connection error: ', err);
+    } catch (error) {
+      logger.error(i18n.translate('database.error.connection', { error }));
       process.exit(1);
     }
   }
@@ -76,6 +78,6 @@ import { Logger } from './services/Logger';
   /* istanbul ignore if */
   if (require.main === module) {
     app.listen(env.PORT);
-    logger.info(`Starting server on port ${env.PORT}`);
+    logger.info(i18n.translate('server.start', { port: env.PORT }));
   }
 })();
