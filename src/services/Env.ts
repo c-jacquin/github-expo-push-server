@@ -1,4 +1,5 @@
 export class Env {
+  public API_GLOB: string;
   public DEFAULT_LOCALE: string;
   public GITHUB_API: string;
   public GITHUB_TOKEN_URI: string;

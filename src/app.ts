@@ -40,7 +40,7 @@ import { Logger } from './services/Logger';
 
     morgan.token('request-id', (req: any) => req.requestId);
 
-    if (env.NODE_ENV !== 'production') {
+    if (env.NODE_ENV === 'production') {
       const stream = fs.createWriteStream(
         path.join(process.cwd(), '/log/combined.log'),
         {
@@ -71,7 +71,7 @@ import { Logger } from './services/Logger';
     .use(generateRequestId)
     .use(setupI18n)
     .use(errorResponder)
-    .use(loadControllers('./api/**/index.ts', { cwd: __dirname }));
+    .use(loadControllers(env.API_GLOB, { cwd: __dirname }));
 
   /* istanbul ignore if */
   if (require.main === module) {
