@@ -44,7 +44,7 @@ import { Logger } from './services/Logger';
 
     if (env.isProduction()) {
       const stream = fs.createWriteStream(
-        path.join(process.cwd(), '/log/combined.log'),
+        path.join(process.cwd(), '/log/httpIn.log'),
         {
           flags: 'a',
         },
