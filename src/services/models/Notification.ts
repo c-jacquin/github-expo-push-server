@@ -7,7 +7,7 @@ export class Notification {
   public to: string;
   public body: string;
   public sound = 'default';
-  public data: any;
+  public data: { type: string };
 
   constructor(to: string, data: GithubNotification, private i18n: I18n) {
     const type = this.getType(data);
@@ -111,6 +111,7 @@ export class Notification {
       repository: this.formatRepository(data.repository),
       sha: data.sha,
       state: data.state,
+      type: this.getType(data),
       updatedAt: data.updated_at,
     };
   }
