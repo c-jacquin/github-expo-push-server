@@ -42,7 +42,7 @@ import { Logger } from './services/Logger';
 
     morgan.token('request-id', (req: any) => req.requestId);
 
-    if (env.NODE_ENV === 'production') {
+    if (env.isProduction()) {
       const stream = fs.createWriteStream(
         path.join(process.cwd(), '/log/combined.log'),
         {
@@ -78,6 +78,6 @@ import { Logger } from './services/Logger';
   /* istanbul ignore if */
   if (require.main === module) {
     app.listen(env.PORT);
-    logger.info(i18n.translate('server.start', { port: env.PORT }));
+    logger.info(i18n.translate('server.listen', { port: env.PORT }));
   }
 })();

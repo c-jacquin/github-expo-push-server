@@ -11,7 +11,7 @@ describe('Http service', () => {
   const env = new Env();
 
   beforeEach(() => {
-    http = new Http(new Logger(env), { requestId: uuid() });
+    http = new Http({ requestId: uuid() }, env);
   });
 
   afterAll(() => {

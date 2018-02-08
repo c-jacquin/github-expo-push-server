@@ -1,10 +1,27 @@
 import * as axios from 'axios';
 import * as clfDate from 'clf-date';
+import { Logger, transports } from 'winston';
 
-import { Logger } from './Logger';
+import { Env } from './Env';
+import { IMeta } from './Meta';
 
 export class Http {
-  constructor(logger: Logger, meta: any) {
+  public static LOG_FILE = 'log/httpOut.log';
+
+  constructor(meta: IMeta, env: Env) {
+    const logger = new Logger({
+      transports: [
+        env.isProduction()
+          ? new transports.File({
+              filename: Http.LOG_FILE,
+              level: env.LOG_LEVEL,
+            })
+          : new transports.Console({
+              colorize: true,
+              level: env.LOG_LEVEL,
+            }),
+      ],
+    });
     axios.default.interceptors.response.use(
       response => {
         logger.info(

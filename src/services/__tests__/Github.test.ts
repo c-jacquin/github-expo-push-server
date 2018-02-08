@@ -12,10 +12,7 @@ describe('Github service', () => {
   let githubService: Github;
 
   beforeEach(() => {
-    githubService = new Github(
-      env,
-      new Http(new Logger(env), { requestId: uuid() }),
-    );
+    githubService = new Github(env, new Http({ requestId: uuid() }, env));
   });
 
   afterAll(() => {

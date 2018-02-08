@@ -8,21 +8,22 @@ const formatter = options =>
     : `${options.message}`;
 
 export class Logger extends WinstonLogger {
-  public static COMBINED_FILE = 'log/combined.log';
+  public static LOG_FILE = 'log/app.log';
 
   constructor(env: Env) {
     super({
       transports: [
-        new transports.Console({
-          colorize: true,
-          formatter,
-          level: env.LOG_LEVEL,
-        }),
-        new transports.File({
-          filename: Logger.COMBINED_FILE,
-          formatter,
-          level: env.LOG_LEVEL,
-        }),
+        env.isProduction()
+          ? new transports.File({
+              filename: Logger.LOG_FILE,
+              formatter,
+              level: env.LOG_LEVEL,
+            })
+          : new transports.Console({
+              colorize: true,
+              formatter,
+              level: env.LOG_LEVEL,
+            }),
       ],
     });
   }

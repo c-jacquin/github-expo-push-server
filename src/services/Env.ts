@@ -1,4 +1,11 @@
+import * as yenv from 'yenv';
+
 export class Env {
+  public APP_ENV: {
+    LOCAL: 'string';
+    PRODUCTION: 'string';
+    STAGING: 'string';
+  };
   public API_GLOB: string;
   public DEFAULT_LOCALE: string;
   public GITHUB_API: string;
@@ -15,6 +22,18 @@ export class Env {
   public TYPEORM_ENTITIES: string[];
 
   constructor() {
-    return require('yenv')();
+    return Object.assign(this, yenv());
+  }
+
+  public isLocal() {
+    return this.NODE_ENV === this.APP_ENV.LOCAL;
+  }
+
+  public isProduction() {
+    return this.NODE_ENV === this.APP_ENV.PRODUCTION;
+  }
+
+  public isStaging() {
+    return this.NODE_ENV === this.APP_ENV.STAGING;
   }
 }
