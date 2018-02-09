@@ -7,9 +7,10 @@ import { IMeta } from './Meta';
 
 export class Http {
   public static LOG_FILE = 'log/httpOut.log';
+  public logger: any;
 
   constructor(meta: IMeta, env: Env) {
-    const logger = new Logger({
+    this.logger = new Logger({
       transports: [
         env.isProduction()
           ? new transports.File({
@@ -24,7 +25,7 @@ export class Http {
     });
     axios.default.interceptors.response.use(
       response => {
-        logger.info(
+        this.logger.info(
           `[${meta.requestId}] - - [${clfDate()}] ` +
             `Http => ${response.config.method.toUpperCase()} ` +
             `${response.config.url} HTTP/1.1 ${response.status} - ` +
@@ -33,7 +34,7 @@ export class Http {
         return response;
       },
       error => {
-        logger.info(
+        this.logger.info(
           `[${meta.requestId}] - - [${clfDate()}] ` +
             `Http => ${error.config.method.toUpperCase()} ` +
             `${error.config.url} HTTP/1.1 ${error.response.status}` +
