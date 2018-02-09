@@ -1,6 +1,6 @@
 import { I18n } from '../I18n';
-import { GithubNotification } from './GithubNotification';
-import { GithubUser } from './GithubUser';
+import { IGithubNotification } from './GithubNotification';
+import { IGithubUser } from './GithubUser';
 import { NotificationType } from './NotificationType';
 
 export class Notification {
@@ -9,7 +9,7 @@ export class Notification {
   public sound = 'default';
   public data: { type: string };
 
-  constructor(to: string, data: GithubNotification, private i18n: I18n) {
+  constructor(to: string, data: IGithubNotification, private i18n: I18n) {
     const type = this.getType(data);
     this.to = to;
 
@@ -65,7 +65,7 @@ export class Notification {
     return type;
   }
 
-  private formatUser(user: GithubUser) {
+  private formatUser(user: IGithubUser) {
     return {
       avatarurl: user.avatar_url,
       id: user.id,
@@ -84,7 +84,7 @@ export class Notification {
     };
   }
 
-  private formateIssueData(data: GithubNotification) {
+  private formateIssueData(data: IGithubNotification) {
     return {
       action: data.action,
       authorAssociation: data.issue.author_association,
@@ -99,7 +99,7 @@ export class Notification {
     };
   }
 
-  private formatCommitdata(data: GithubNotification) {
+  private formatCommitdata(data: IGithubNotification) {
     return {
       branches: data.branches,
       commit: data.commit.commit,
@@ -116,7 +116,7 @@ export class Notification {
     };
   }
 
-  private formatPullRequestdata(data: GithubNotification) {
+  private formatPullRequestdata(data: IGithubNotification) {
     return {
       action: data.action,
       additions: data.pull_request.additions,

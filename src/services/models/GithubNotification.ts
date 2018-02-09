@@ -1,34 +1,33 @@
-import { GithubUser } from './GithubUser';
+import { IGithubUser } from './GithubUser';
 
-/* tslint:disable */
-export class GithubNotification {
-  public branches: any;
-  public created_at: string;
-  public updated_at: string;
-  public context: string;
-  public sha: string;
-  public description: string;
-  public id: string;
-  public issue: {
+export interface IGithubNotification {
+  branches: any;
+  created_at: string;
+  updated_at: string;
+  context: string;
+  sha: string;
+  description: string;
+  id: string;
+  issue: {
     id: string;
     url: string;
     title: string;
-    user: GithubUser;
+    user: IGithubUser;
     created_at: string;
     updated_at: string;
     author_association: string;
   };
-  public action: string;
-  public pull_request: any;
-  public commit: any;
-  public type: string;
-  public repository: {
+  action: string;
+  pull_request: any;
+  commit: any;
+  type: string;
+  repository: {
     id: string;
     full_name: string;
-    owner: GithubUser;
+    owner: IGithubUser;
     url: string;
     language: string;
     stargazers: string;
   };
-  public state: string;
+  state: string;
 }
