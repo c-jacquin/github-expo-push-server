@@ -1,6 +1,6 @@
 import { I18n } from '../I18n';
-import { IGithubNotification } from './GithubNotification';
-import { IGithubUser } from './GithubUser';
+import { IGithubNotification } from './IGithubNotification';
+import { IGithubUser } from './IGithubUser';
 import { NotificationType } from './NotificationType';
 
 export class Notification {

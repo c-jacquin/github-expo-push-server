@@ -1,7 +1,7 @@
 {
   "name": "github-expo-push-server",
   "scripts": {
- },
+},
   "env": {
     "NPM_CONFIG_PRODUCTION": {
       "value": "false"

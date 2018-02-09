@@ -1,4 +1,4 @@
-import { IGithubUser } from './GithubUser';
+import { IGithubUser } from './IGithubUser';
 
 export interface IGithubNotification {
   branches: any;

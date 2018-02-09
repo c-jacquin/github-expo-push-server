@@ -1,6 +1,6 @@
 import { Env } from './Env';
 import { Http } from './Http';
-import { GithubUser } from './models/GithubUser';
+import { IGithubUser } from './models/IGithubUser';
 
 export class Github {
   constructor(private env: Env, private http: Http) {}
@@ -15,7 +15,7 @@ export class Github {
     return result.data.split('=')[1].split('&')[0];
   }
 
-  public async getUser(token: string): Promise<GithubUser> {
+  public async getUser(token: string): Promise<IGithubUser> {
     const result = await this.http.get(this.env.GITHUB_API + '/user', {
       headers: {
         Accept: 'application/vnd.github.v3+json',
