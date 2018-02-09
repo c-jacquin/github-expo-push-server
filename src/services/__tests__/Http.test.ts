@@ -1,6 +1,7 @@
 import 'jest';
 import * as nock from 'nock';
 import * as uuid from 'uuid';
+import { transports } from 'winston';
 
 import { Env } from '../Env';
 import { Http } from '../Http';
@@ -16,6 +17,13 @@ describe('Http service', () => {
 
   afterAll(() => {
     nock.cleanAll();
+  });
+
+  it('should use the file logger in production', () => {
+    env.NODE_ENV = 'production';
+    http = new Http({ requestId: uuid() }, env);
+    env.NODE_ENV = 'test';
+    expect(http.logger.transports.file).toBeInstanceOf(transports.File);
   });
 
   it('post => should make a POST http call to the given url with the given body.', async () => {

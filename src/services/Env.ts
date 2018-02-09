@@ -2,6 +2,7 @@ import * as yenv from 'yenv';
 
 export class Env {
   public APP_ENV: {
+    TEST: string;
     LOCAL: 'string';
     PRODUCTION: 'string';
     STAGING: 'string';
@@ -23,6 +24,10 @@ export class Env {
 
   constructor() {
     return Object.assign(this, yenv());
+  }
+
+  public isTest() {
+    return this.NODE_ENV === this.APP_ENV.TEST;
   }
 
   public isLocal() {
