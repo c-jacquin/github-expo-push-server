@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/charjac/github-expo-push-server.svg?branch=master)](https://travis-ci.org/charjac/github-expo-push-server)
-[![Coverage Status](https://coveralls.io/repos/github/charjac/github-expo-push-server/badge.svg?branch=master)](https://coveralls.io/github/charjac/github-expo-push-server?branch=master)
+[![Build Status](https://travis-ci.org/charjac/github-expo-push-server.svg?branch=staging)](https://travis-ci.org/charjac/github-expo-push-server)
+[![Coverage Status](https://coveralls.io/repos/github/charjac/github-expo-push-server/badge.svg?branch=staging)](https://coveralls.io/github/charjac/github-expo-push-server?branch=master)
 [![Dependency Status](https://david-dm.org/charjac/github-expo-push-server.svg)](https://david-dm.org/charjac/github-expo-push-server) [![devDependency Status](https://david-dm.org/charjac/github-expo-push-server/dev-status.svg)](https://david-dm.org/charjac/github-expo-push-server#info=devDependencies)
 
 # Github expo push notifications server
