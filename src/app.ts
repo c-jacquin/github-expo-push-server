@@ -8,13 +8,6 @@ import * as bodyParser from 'koa-bodyparser';
 import * as helmet from 'koa-helmet';
 import * as morgan from 'koa-morgan';
 import * as path from 'path';
-import {
-  getMongoManager,
-  getMongoRepository,
-  MongoEntityManager,
-  MongoRepository,
-  ObjectID,
-} from 'typeorm';
 
 export const app = new Koa();
 
