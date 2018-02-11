@@ -56,14 +56,22 @@ export default class PushApi {
   public async register(ctx) {
     try {
       const { login } = ctx.state.container.resolve('user');
+
       const user = new User();
       user.login = login;
       user.pushToken = ctx.request.body.pushToken;
 
-      await this.dbManager.save(user);
+      const result = await Promise.all([
+        this.dbManager.save(user),
+        this.userRepository.findOne({
+          login,
+          select: ['pushCommit', 'pushEnabled', 'pushIssue', 'pushPr'],
+        }),
+      ]);
 
       ctx.body = {
         message: this.i18n.translate('push.register.success'),
+        pushSettings: result[1],
       };
     } catch (err) {
       // if duplicate error send a 200 status
@@ -92,11 +100,20 @@ export default class PushApi {
   public async pushProfile(ctx) {
     try {
       const { login } = ctx.state.container.resolve('user');
+      const { profile } = ctx.request.body;
 
-      await this.userRepository.findOneAndUpdate({ login }, ctx.request.body);
+      const user = await this.userRepository.findOne({ login });
+
+      user.pushCommit = profile.pushCommit;
+      user.pushEnabled = profile.pushEnabled;
+      user.pushIssue = profile.pushIssue;
+      user.pushPr = profile.pushPr;
+
+      await this.userRepository.save(user);
 
       ctx.body = {
         message: this.i18n.translate('profile.update.success'),
+        profile,
       };
     } catch (err) {
       ctx.throw(400, 'profile.update.error', { originalError: err });

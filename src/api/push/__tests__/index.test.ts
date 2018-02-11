@@ -37,17 +37,19 @@ describe('Push Notification', () => {
   });
 
   describe('POST /push/register', () => {
-    it('should respond with a success message', () => {
-      return request
+    it('should respond with a success message', async () => {
+      const response = await request
         .post('/push/register')
         .set({ authorization: 'token' })
         .send({
           login: 'test',
           pushToken: 'ExponentPushToken[InsQgdYEVGYODIlggg9uFD]',
         })
-        .expect(200, {
-          message: 'Succesfully subscribe to push notifications.',
-        });
+        .expect(200);
+
+      expect(response.body.message).toBe(
+        'Succesfully subscribe to push notifications.',
+      );
     });
   });
 
@@ -65,7 +67,15 @@ describe('Push Notification', () => {
             pushPr: false,
           },
         })
-        .expect(200, { message: 'profile updated.' });
+        .expect(200, {
+          message: 'profile updated.',
+          profile: {
+            pushCommit: false,
+            pushEnabled: true,
+            pushIssue: true,
+            pushPr: false,
+          },
+        });
     });
   });
 });
